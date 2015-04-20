@@ -1,4 +1,6 @@
 int deviceAddress = 0x20;
+int sensorPin = A0; 
+int sensorValue = 0; 
 
 #include <Wire.h>
 
@@ -6,21 +8,33 @@ int deviceAddress = 0x20;
 // this function is registered as an event, see setup()
 void requestEvent()
 {
-  Wire.write("hello "); // respond with message of 6 bytes
-                       // as expected by master
+  sensorValue = analogRead(sensorPin);
+  Wire.write(sensorValue); 
 }
 
+void readAnalogPins()
+{
+  Serial.println("Master asked for results...");
+  for (int i=0; i <= 4; i++){
+    int result = analogRead(i);
+    //Serial.print(":  ");
+    //Serial.print(result);
+    //Serial.print("\t");
+    Wire.write(result); 
+  }
+}
 void setup()
 {
   Wire.begin(deviceAddress);       
-  Wire.onRequest(requestEvent);
-  Serial.begin(9600);  
+  Wire.onRequest(readAnalogPins);
+  Serial.begin(9600); 
 }
 
 
 void loop()
 {
-  delay(100);
+  Serial.println('In a loop waiting for I2C master to ask for me');
+  delay(1000);
 }
 
 
