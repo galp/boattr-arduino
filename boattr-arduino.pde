@@ -7,9 +7,8 @@ int analogPinsCount = 4;
 void readAnalogPins()
 {
   byte data[analogPinsCount];
-  int result;
   Serial.println("I2C Master called me...");
-  for (int i=0; i <= analogPinsCount-1; i++){
+  for (int i=0; i < analogPinsCount; i++){
     data[i] = analogRead(i);
     Serial.println(String(data[i]));
   }
